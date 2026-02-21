@@ -12,7 +12,7 @@
 // показывает справку по использованию
 // когда пользователь не знает что делать
 void showHelp() {
-    std::cout << "hashface - GitHub-style avatar generator\n";
+    std::cout << "hashface -  avatar generator\n";
     std::cout << "by lakladon\n\n";
     std::cout << "Usage:\n";
     std::cout << "  hashface --name John        generate from name\n";
