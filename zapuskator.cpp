@@ -124,7 +124,7 @@ int main(int argc, char* argv[]) {
     GridMaker gridMaker;
     
     // генерируем сетку 12x12
-    std::cout << "Generating avatar from: " << inputString << "\n";
+    std::cout << "Gen avatar from: " << inputString << "\n";
     std::vector<std::vector<int>> grid = gridMaker.generate(inputString);
     
     // выводим аватарку в терминал
@@ -139,7 +139,6 @@ int main(int argc, char* argv[]) {
     
     if (pngDrawer.saveGrid(grid, outputFile, 10)) {
         std::cout << "Avatar saved to: " << outputFile << "\n";
-        std::cout << "Size: 120x120 pixels (12x12 * 10)\n";
         return 0;
     } else {
         std::cerr << "Error: failed to save file\n";
