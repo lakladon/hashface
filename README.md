@@ -1,119 +1,82 @@
-# hashface
+# HashFace - GitHub-style Avatar Generator
 
-GitHub-style avatar generator in C++
+Генератор дефолтных аватарок в стиле GitHub на C++.
 
-by lakladon
+## Описание
 
-## Description
+HashFace создаёт уникальные идентификоны (identicons) на основе MD5 хеша входной строки. Каждый аватар представляет собой симметричный паттерн 5x5 (по умолчанию), где цвет и форма определяются хешем.
 
-hashface generates unique 12x12 pixel avatars similar to GitHub's identicons. Each avatar is symmetric and deterministic - the same input always produces the same avatar.
+## Требования
 
-## Features
+- C++17 совместимый компилятор
+- CMake 3.10+
+- zlib (zlib1g-dev)
 
-- Deterministic generation from any string input
-- Symmetric avatars (mirrored pattern)
-- 5-color palette matching GitHub's style
-- ASCII art output in terminal
-- PNG export with 10x scaling (120x120 pixels)
-- No external image libraries required (uses zlib only)
-
-## Building
+### Установка зависимостей (Ubuntu/Debian)
 
 ```bash
-# Install dependencies (Ubuntu/Debian)
-sudo apt-get install zlib1g-dev
+sudo apt install build-essential cmake zlib1g-dev
+```
 
-# Build
+## Сборка
+
+```bash
+mkdir build && cd build
+cmake ..
 make
-
-# Clean build files
-make clean
 ```
 
-## Usage
+## Использование
 
 ```bash
-# Generate from name
-./hashface --name "John"
-
-# Generate from text
-./hashface --text "hello world"
-
-# Generate from email
-./hashface --email "user@example.com"
-
-# Generate random avatar
-./hashface --random
-
-# Specify output file
-./hashface --name "John" --output "john.png"
-
-# Show help
-./hashface --help
+./hashface [options] <input_string>
 ```
 
-## Command Line Options
+### Опции
 
-| Option | Description |
-|--------|-------------|
-| `--name <string>` | Generate avatar from name |
-| `--text <string>` | Generate avatar from text |
-| `--email <string>` | Generate avatar from email |
-| `--random` | Generate random avatar |
-| `--output <file>` | Output filename (default: avatar.png) |
-| `--help` | Show help message |
+| Опция | Описание | По умолчанию |
+|-------|----------|--------------|
+| `-o <file>` | Имя выходного файла | `avatar.png` |
+| `-s <size>` | Размер изображения в пикселях | `420` |
+| `-g <grid>` | Размер сетки | `5` |
+| `-h, --help` | Показать справку | - |
 
-## Output
+### Примеры
 
-The program outputs:
-1. ASCII art representation in terminal
-2. PNG file (120x120 pixels)
+```bash
+# Базовое использование
+./hashface "john@example.com"
 
-Example terminal output:
-```
-+------------------------+
-|▒▒▓▓▓▓  ▒▒████▒▒  ▓▓▓▓▒▒|
-|██    ░░▒▒▒▒▒▒▒▒░░    ██|
-|░░▒▒      ▓▓▓▓      ▒▒░░|
-|░░░░░░░░▒▒░░░░▒▒░░░░░░░░|
-|▓▓▒▒▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒▓▓|
-|▓▓░░██▓▓  ▒▒▒▒  ▓▓██░░▓▓|
-|▓▓  ▒▒██▓▓▓▓▓▓▓▓██▒▒  ▓▓|
-|░░▓▓██            ██▓▓░░|
-|▓▓  ▓▓  ▓▓▓▓▓▓▓▓  ▓▓  ▓▓|
-|████  ▒▒░░████░░▒▒  ████|
-|░░▓▓  ▓▓██▓▓▓▓██▓▓  ▓▓░░|
-|▓▓██  ▓▓██▓▓▓▓██▓▓  ██▓▓|
-+------------------------+
+# Указать выходной файл и размер
+./hashface -o user123.png -s 256 "user123"
+
+# Использовать сетку 7x7
+./hashface -g 7 "octocat"
 ```
 
-## Color Palette
+## Как это работает
 
-| Level | Color | Description |
-|-------|-------|-------------|
-| 0 | `#EBEDF0` | Empty (light gray) |
-| 1 | `#9BE9A8` | Level 1 (light green) |
-| 2 | `#40C463` | Level 2 (green) |
-| 3 | `#30A14E` | Level 3 (dark green) |
-| 4 | `#216E39` | Level 4 (very dark green) |
+1. Вычисляется MD5 хеш входной строки
+2. Первые 3 байта хеша определяют цвет аватара
+3. Биты хеша определяют, какие ячейки сетки будут закрашены
+4. Паттерн зеркально отражается по горизонтали (как в GitHub)
+5. Результат сохраняется в PNG файл
 
-## Project Structure
+## Структура проекта
 
 ```
 hashface/
-├── gridmaker.h      # Grid generator header
-├── gridmaker.cpp    # Grid generator implementation
-├── pngdrawer.h      # PNG writer header
-├── pngdrawer.cpp    # PNG writer implementation
-├── zapuskator.cpp   # Main program
-├── Makefile         # Build configuration
-└── README.md        # This file
+├── CMakeLists.txt
+├── README.md
+├── include/
+│   ├── avatar_generator.hpp
+│   └── md5.hpp
+└── src/
+    ├── main.cpp
+    ├── avatar_generator.cpp
+    └── md5.cpp
 ```
 
-## License
+## Лицензия
 
-MIT License
-
-## Author
-
-by lakladon
+MIT
